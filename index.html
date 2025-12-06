@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡️ 긴급 경보: 기말고사 시한폭탄 카운트다운</title>
+    <title>MinsuGPT</title>
     <style>
         /* 1. 전체 배경 및 기본 설정 */
         body {
@@ -32,10 +32,9 @@
             overflow: hidden; 
         }
 
-        /* 3. 시한폭탄 이미지 컨테이너 (vmin 단위 적용 - 크기 축소) */
+        /* 3. 시한폭탄 이미지 컨테이너 (vmin 단위 적용 - 크기 60vmin) */
         .bomb-container {
             position: relative;
-            /* ✨ 수정된 부분: 크기 70vmin -> 60vmin으로 축소 */
             width: 60vmin; 
             height: 60vmin;
             background-image: url('https://i.postimg.cc/BbGnrXRv/istockphoto-1577934549-612x612-removebg-preview.png');
@@ -52,7 +51,6 @@
             width: 100%;
             text-align: center;
             color: #ffc107;
-            /* ✨ 수정: 텍스트 크기를 3vmin -> 2.5vmin으로 축소 (비율 유지) */
             font-size: 2.5vmin; 
             font-weight: bold;
             text-shadow: 0 0 10px #ffc107, 0 0 5px #ff0000;
@@ -72,22 +70,22 @@
             border-radius: 3px;
             box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
             
-            animation: gentle-pulse 1.5s infinite alternate;
+            animation: gentle-pulse 1.5s infinite alternate; /* 기본 애니메이션 */
             z-index: 30; 
         }
 
         /* 6. 카운트다운 숫자 스타일 (vmin 기반) */
         #countdown-display {
-            /* ✨ 수정: 텍스트 크기를 7vmin -> 6vmin으로 축소 (비율 유지) */
             font-size: 4vmin; 
             color: #ff0000; 
             text-shadow: 0 0 10px #ff0000;
             white-space: nowrap; 
+            /* ✨ 수정: 깜빡임 속도 (1s -> 0.5s)와 강도 증가 */
+            animation: warning-flash-subtle 0.5s infinite alternate; 
         }
         
         /* 7. 시간 단위 레이블 (vmin 기반) */
         .label-container {
-            /* ✨ 수정: 텍스트 크기를 1.2vmin -> 1vmin으로 축소 (비율 유지) */
             font-size: 1vmin; 
             color: #888;
             margin-top: 5px;
@@ -95,6 +93,13 @@
             justify-content: space-around;
         }
 
+        /* 시험 당일 (9시 전) 타이머 배경 경고 스타일 */
+        .day-of-exam-warning {
+            border-color: #FFA500 !important; 
+            /* ✨ 수정: 시험 당일 배경 깜빡임 속도 (0.7s -> 0.4s) 증가 */
+            animation: danger-pulse 0.4s infinite alternate !important; 
+        }
+        
         /* 8. YouTube 영상 섹션 (나머지 스타일은 동일) */
         .video-section {
             width: 90%;
@@ -125,73 +130,38 @@
             height: 100%;
         }
 
-        /* 9. 애니메이션 */
+        /* 9. 애니메이션 정의 */
         
-        /* 글로우 효과 스타일 (공통) */
-        .glow-effect {
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 1; 
-            mix-blend-mode: screen; 
-            filter: blur(50px); 
-        }
-        
-        /* 각 글로우 개별 스타일 및 애니메이션 속도 */
-        .glow-effect:nth-child(1) {
-            width: 350px; height: 350px;
-            background: radial-gradient(circle, rgba(255, 50, 50, 0.4) 0%, transparent 70%);
-            animation: move-glow 15s infinite alternate;
-        }
-        .glow-effect:nth-child(2) {
-            width: 200px; height: 200px;
-            background: radial-gradient(circle, rgba(255, 100, 0, 0.3) 0%, transparent 80%);
-            animation: move-glow-2 18s infinite reverse;
-            left: 80%; top: 10%;
-        }
-        .glow-effect:nth-child(3) {
-            width: 450px; height: 450px;
-            background: radial-gradient(circle, rgba(255, 0, 0, 0.3) 0%, transparent 60%);
-            animation: move-glow 12s infinite alternate-reverse;
-            left: -20%; top: 50%;
-        }
-        .glow-effect:nth-child(4) {
-            width: 150px; height: 150px;
-            background: radial-gradient(circle, rgba(255, 255, 0, 0.5) 0%, transparent 70%);
-            animation: move-glow-3 10s infinite alternate;
-            left: 10%; top: 70%;
-        }
-        .glow-effect:nth-child(5) {
-            width: 280px; height: 280px;
-            background: radial-gradient(circle, rgba(255, 50, 0, 0.35) 0%, transparent 75%);
-            animation: move-glow-2 16s infinite alternate;
-            left: 50%; top: 0%;
-        }
-        .glow-effect:nth-child(6) {
-            width: 100px; height: 100px;
-            background: radial-gradient(circle, rgba(255, 0, 200, 0.25) 0%, transparent 85%);
-            animation: move-glow-3 20s infinite reverse;
-            left: 0%; top: 0%;
-        }
-        .glow-effect:nth-child(7) {
-            width: 320px; height: 320px;
-            background: radial-gradient(circle, rgba(255, 100, 100, 0.4) 0%, transparent 70%);
-            animation: move-glow 14s infinite reverse;
-            left: 70%; top: 70%;
+        /* D-Day 아니어도 글씨가 은은하게 깜빡이는 애니메이션 */
+        @keyframes warning-flash-subtle {
+            /* ✨ 수정: 명암 대비를 1 -> 0.4로 더 강하게 변경 */
+            from { opacity: 1; }
+            to { opacity: 0.7; } 
         }
 
-        /* 타이머 본체 은은한 깜빡임 */
+        /* 시험 당일 (9시 전) 타이머 배경 깜빡이는 애니메이션 */
+        @keyframes danger-pulse {
+            from { 
+                box-shadow: 0 0 15px rgba(255, 165, 0, 0.7); 
+                background-color: #1a0000;
+            }
+            to { 
+                box-shadow: 0 0 30px rgba(255, 165, 0, 1); 
+                background-color: #500000; /* ✨ 수정: 더 진한 빨간색으로 배경 변경 (대비 강화) */
+            }
+        }
+
+        /* 타이머 본체 기본 깜빡임 */
         @keyframes gentle-pulse {
             from { box-shadow: 0 0 15px rgba(255, 0, 0, 0.7); }
             to { box-shadow: 0 0 25px rgba(255, 100, 100, 0.9); }
         }
 
-        /* D-DAY 폭발 경고 스타일 (vmin 기반) */
+        /* D-DAY 폭발 경고 스타일 (Time Up) */
         .countdown-finished {
-            /* ✨ 수정: 텍스트 크기를 10vmin -> 8.5vmin으로 축소 (비율 유지) */
             font-size: 4.5vmin !important; 
             color: #FF4500 !important;
-            animation: warning-flash 0.3s infinite alternate;
+            animation: warning-flash 0.3s infinite alternate; 
             text-shadow: 0 0 30px #FF4500;
         }
         
@@ -201,31 +171,26 @@
             to { opacity: 0.2; }
         }
         
-        /* 글로우 움직임 1 */
-        @keyframes move-glow {
+        /* 글로우 움직임은 기존과 동일 */
+        @keyframes move-glow { 
             0% { transform: translate(-100px, -100px); }
             25% { transform: translate(100px, 150px); }
             50% { transform: translate(-150px, 50px); }
             75% { transform: translate(50px, -100px); }
             100% { transform: translate(-100px, -100px); }
         }
-        
-        /* 글로우 움직임 2 */
-        @keyframes move-glow-2 {
+        @keyframes move-glow-2 { 
             0% { transform: translate(200px, 0px) scale(1); }
             50% { transform: translate(-200px, 300px) scale(1.1); }
             100% { transform: translate(200px, 0px) scale(1); }
         }
-        
-        /* 글로우 움직임 3 */
-        @keyframes move-glow-3 {
+        @keyframes move-glow-3 { 
             0% { transform: translate(-50px, 50px); }
             100% { transform: translate(100px, -150px); }
         }
     </style>
 </head>
 <body>
-
     <div class="countdown-wrapper">
         <div class="glow-effect"></div>
         <div class="glow-effect"></div>
@@ -269,43 +234,56 @@
     </div>
 
     <script>
+        // 현재는 2025년 12월 7일입니다.
         // 목표 날짜 및 시간 설정 (2025년 12월 8일 09:00:00 KST)
         const targetDate = new Date("December 8, 2025 09:00:00").getTime();
+        
+        // 목표 날짜 정보 (월은 0부터 시작: 11 = 12월)
+        const examDayMonth = 11; 
+        const examDayDate = 8; 
 
         const displayElement = document.getElementById('countdown-display');
         const messageElement = document.getElementById('message');
+        const timerElement = document.querySelector('.digital-timer'); 
 
         function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
+            const now = new Date();
+            const distance = targetDate - now.getTime();
 
-            // 시간 계산
+            // 1. 시험 당일 (9시 이전) 체크 로직
+            const isExamDayBeforeTime = 
+                now.getMonth() === examDayMonth &&
+                now.getDate() === examDayDate &&
+                distance > 0; 
+
+            if (isExamDayBeforeTime) {
+                // 시험 당일 9시 전이면 타이머 배경 깜빡임 클래스 추가
+                timerElement.classList.add('day-of-exam-warning');
+            } else {
+                timerElement.classList.remove('day-of-exam-warning');
+            }
+            
+            // 시간 계산 및 표시 로직
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            // 두 자리수로 포맷팅
             const formatTime = (time, pad = 2) => String(time).padStart(pad, '0');
 
-            // 카운트다운 표시
             if (distance > 0) {
-                // 일, 시, 분, 초를 콜론으로 연결하여 표시
                 displayElement.innerHTML = `
                     ${days}:${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}
                 `;
             } else {
-                // 시험 시간이 되었거나 지났을 때
                 displayElement.innerHTML = '<span class="countdown-finished">T I M E &nbsp; U P!</span>';
                 messageElement.innerHTML = '🔥 EXAM HAS BEGUN! GOOD LUCK! 🔥';
-                clearInterval(interval); // 카운트다운 중지
+                timerElement.classList.remove('day-of-exam-warning');
+                clearInterval(interval); 
             }
         }
 
-        // 1초마다 업데이트
         const interval = setInterval(updateCountdown, 1000);
-
-        // 페이지 로드 시 즉시 실행
         updateCountdown();
     </script>
 </body>
