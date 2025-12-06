@@ -8,29 +8,138 @@
         /* 1. 전체 배경 및 기본 설정 */
         body {
             display: flex;
-            justify-content: center;
+            flex-direction: column; /* 세로로 배치 */
+            justify-content: flex-start; /* 상단에서 시작 */
             align-items: center;
-            height: 100vh;
+            height: auto;
+            min-height: 100vh;
             margin: 0;
-            background-color: #000; /* 검은 배경 */
+            background-color: #000; 
             font-family: 'Courier New', monospace;
             color: #fff;
-            overflow: hidden;
-            
+            overflow-x: hidden; /* 글로우로 인한 가로 스크롤 방지 */
             position: relative; 
         }
 
-        /* 배경 글로우 효과 스타일 (공통) */
+        /* 2. 카운트다운 섹션 (100vh 고정) */
+        .countdown-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: 100vw;
+            height: 100vh; /* 화면 높이 전체를 차지 */
+            overflow: hidden; /* 글로우가 화면 밖으로 나가도 스크롤 생기지 않도록 함 */
+        }
+
+        /* 3. 시한폭탄 이미지 컨테이너 (반응형 vmin 단위 적용) */
+        .bomb-container {
+            position: relative;
+            /* ✨ 수정: vmin으로 변경하여 화면 크기에 맞게 조정 */
+            width: 70vmin; 
+            height: 70vmin;
+            background-image: url('https://i.postimg.cc/BbGnrXRv/istockphoto-1577934549-612x612-removebg-preview.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: 10; 
+        }
+
+        /* 4. 노란색 글씨 (메시지) 위치 조정 및 크기 확대 */
+        .message-box {
+            position: absolute;
+            /* ✨ 수정: %로 변경하여 폭탄 컨테이너에 맞춰 조정 */
+            top: 7%; 
+            width: 100%;
+            text-align: center;
+            color: #ffc107;
+            /* ✨ 수정: 텍스트 크기 확대 */
+            font-size: 1.8em; 
+            font-weight: bold;
+            text-shadow: 0 0 10px #ffc107, 0 0 5px #ff0000;
+            z-index: 20; 
+        }
+        
+        /* 5. 디지털 타이머 (이미지 위에 오버레이) */
+        .digital-timer {
+            position: absolute;
+            /* ✨ 수정: %로 변경하여 폭탄 컨테이너에 맞춰 조정 */
+            top: 44%; 
+            left: 50%;
+            transform: translateX(-50%);
+            
+            background: #000;
+            border: 2px solid #555;
+            padding: 5px 10px;
+            border-radius: 3px;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+            
+            animation: gentle-pulse 1.5s infinite alternate;
+            z-index: 30; 
+        }
+
+        /* 6. 카운트다운 숫자 스타일 */
+        #countdown-display {
+            /* ✨ 수정: 숫자 크기 확대 */
+            font-size: 3.5em; 
+            color: #ff0000; 
+            text-shadow: 0 0 10px #ff0000;
+            white-space: nowrap; 
+        }
+        
+        /* 7. 시간 단위 레이블 */
+        .label-container {
+            /* ✨ 수정: 레이블 크기 확대 */
+            font-size: 0.7em; 
+            color: #888;
+            margin-top: 5px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        /* 8. YouTube 영상 섹션 */
+        .video-section {
+            width: 90%;
+            max-width: 800px;
+            margin: 50px auto 100px auto;
+            text-align: center;
+        }
+
+        .video-section h2 {
+            color: #ff0000;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 비율 유지 */
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 9. 애니메이션 (글로우 및 타이머) */
+        
+        /* 글로우 효과 스타일 (공통) */
         .glow-effect {
             position: absolute;
             border-radius: 50%;
             pointer-events: none;
-            z-index: 1; /* 폭탄 이미지보다 뒤에 위치 */
+            z-index: 1; 
             mix-blend-mode: screen; 
             filter: blur(50px); 
         }
         
-        /* 각 글로우 개별 스타일 및 애니메이션 속도 (이전과 동일) */
+        /* 각 글로우 개별 스타일 및 애니메이션 속도 */
         .glow-effect:nth-child(1) {
             width: 350px; height: 350px;
             background: radial-gradient(circle, rgba(255, 50, 50, 0.4) 0%, transparent 70%);
@@ -73,72 +182,6 @@
             left: 70%; top: 70%;
         }
 
-        /* 2. 시한폭탄 이미지 컨테이너 */
-        .bomb-container {
-            position: relative;
-            /* ✨ 수정된 부분: 이미지 크기 확대 (612px -> 700px) */
-            width: 700px; 
-            height: 700px;
-            background-image: url('https://i.postimg.cc/BbGnrXRv/istockphoto-1577934549-612x612-removebg-preview.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            z-index: 10; 
-        }
-
-        /* 3. 노란색 글씨 (메시지) 위치 조정 - 사진 위로 올림 */
-        .message-box {
-            position: absolute;
-            top: 50px; 
-            width: 100%;
-            text-align: center;
-            color: #ffc107;
-            /* ✨ 수정된 부분: 노란색 텍스트 크기 확대 (1.2em -> 1.8em) */
-            font-size: 1.8em; 
-            font-weight: bold;
-            text-shadow: 0 0 10px #ffc107, 0 0 5px #ff0000;
-            z-index: 20; 
-        }
-        
-        /* 4. 디지털 타이머 (이미지 위에 오버레이) */
-        .digital-timer {
-            position: absolute;
-            /* ✨ 수정된 부분: 이미지 크기가 커졌으므로 타이머 위치 조정 */
-            top: 310px; 
-            left: 50%;
-            transform: translateX(-50%);
-            
-            background: #000;
-            border: 2px solid #555;
-            padding: 5px 10px;
-            border-radius: 3px;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
-            
-            animation: gentle-pulse 1.5s infinite alternate;
-            z-index: 30; 
-        }
-
-        /* 5. 카운트다운 숫자 스타일 */
-        #countdown-display {
-            /* ✨ 수정된 부분: 카운트다운 숫자 크기 확대 (2.2em -> 3.5em) */
-            font-size: 3.5em; 
-            color: #ff0000; 
-            text-shadow: 0 0 10px #ff0000;
-            white-space: nowrap; 
-        }
-        
-        /* 6. 시간 단위 레이블 */
-        .label-container {
-            /* ✨ 수정된 부분: 레이블 크기 확대 (0.5em -> 0.7em) */
-            font-size: 0.7em; 
-            color: #888;
-            margin-top: 5px;
-            display: flex;
-            justify-content: space-around;
-        }
-
-        /* 7. 애니메이션 정의 */
-        
         /* 타이머 본체 은은한 깜빡임 */
         @keyframes gentle-pulse {
             from { box-shadow: 0 0 15px rgba(255, 0, 0, 0.7); }
@@ -147,7 +190,6 @@
 
         /* D-DAY 폭발 경고 스타일 */
         .countdown-finished {
-            /* ✨ 수정된 부분: 폭발 경고 크기 확대 (2.5em -> 4em) */
             font-size: 4em !important; 
             color: #FF4500 !important;
             animation: warning-flash 0.3s infinite alternate;
@@ -185,31 +227,46 @@
 </head>
 <body>
 
-    <div class="glow-effect"></div>
-    <div class="glow-effect"></div>
-    <div class="glow-effect"></div>
-    <div class="glow-effect"></div>
-    <div class="glow-effect"></div>
-    <div class="glow-effect"></div>
-    <div class="glow-effect"></div>
+    <div class="countdown-wrapper">
+        <div class="glow-effect"></div>
+        <div class="glow-effect"></div>
+        <div class="glow-effect"></div>
+        <div class="glow-effect"></div>
+        <div class="glow-effect"></div>
+        <div class="glow-effect"></div>
+        <div class="glow-effect"></div>
 
-    <div class="bomb-container">
-        
-        <div class="message-box" id="message">
-            🚨 Final exam is coming 🚨
-        </div>
-        
-        <div class="digital-timer">
-            <div id="countdown-display">
-                </div>
-            <div class="label-container">
-                <span>D</span>
-                <span>H</span>
-                <span>M</span>
-                <span>S</span>
+        <div class="bomb-container">
+            
+            <div class="message-box" id="message">
+                🚨 Final exam is coming 🚨
             </div>
-        </div>
+            
+            <div class="digital-timer">
+                <div id="countdown-display">
+                    </div>
+                <div class="label-container">
+                    <span>D</span>
+                    <span>H</span>
+                    <span>M</span>
+                    <span>S</span>
+                </div>
+            </div>
 
+        </div>
+    </div>
+    
+    <div class="video-section">
+        <h2>🔥 집중력을 폭발시켜라 🔥</h2>
+        <div class="video-container">
+            <iframe 
+                src="https://www.youtube.com/embed/a_80o2lDYec?autoplay=1&mute=1&controls=0&loop=1&playlist=a_80o2lDYec" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
+        <p style="color: #666; font-size: 0.8em; margin-top: 15px;">(영상은 집중력 향상을 위해 음소거 및 자동 반복됩니다)</p>
     </div>
 
     <script>
