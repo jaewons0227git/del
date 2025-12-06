@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡️ 긴급 경보: 기말고사 시한폭탄 카운트다운</title>
+    <style>
+        /* 1. 전체 배경 및 기본 설정 */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000; /* 검은 배경 */
+            font-family: 'Courier New', monospace;
+            color: #fff;
+            overflow: hidden;
+            
+            position: relative; 
+        }
+
+        /* 배경 글로우 효과 스타일 (공통) */
+        .glow-effect {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1; /* 폭탄 이미지보다 뒤에 위치 */
+            mix-blend-mode: screen; 
+            filter: blur(50px); 
+        }
+        
+        /* 각 글로우 개별 스타일 및 애니메이션 속도 (이전과 동일) */
+        .glow-effect:nth-child(1) {
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, rgba(255, 50, 50, 0.4) 0%, transparent 70%);
+            animation: move-glow 15s infinite alternate;
+        }
+        .glow-effect:nth-child(2) {
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(255, 100, 0, 0.3) 0%, transparent 80%);
+            animation: move-glow-2 18s infinite reverse;
+            left: 80%; top: 10%;
+        }
+        .glow-effect:nth-child(3) {
+            width: 450px; height: 450px;
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.3) 0%, transparent 60%);
+            animation: move-glow 12s infinite alternate-reverse;
+            left: -20%; top: 50%;
+        }
+        .glow-effect:nth-child(4) {
+            width: 150px; height: 150px;
+            background: radial-gradient(circle, rgba(255, 255, 0, 0.5) 0%, transparent 70%);
+            animation: move-glow-3 10s infinite alternate;
+            left: 10%; top: 70%;
+        }
+        .glow-effect:nth-child(5) {
+            width: 280px; height: 280px;
+            background: radial-gradient(circle, rgba(255, 50, 0, 0.35) 0%, transparent 75%);
+            animation: move-glow-2 16s infinite alternate;
+            left: 50%; top: 0%;
+        }
+        .glow-effect:nth-child(6) {
+            width: 100px; height: 100px;
+            background: radial-gradient(circle, rgba(255, 0, 200, 0.25) 0%, transparent 85%);
+            animation: move-glow-3 20s infinite reverse;
+            left: 0%; top: 0%;
+        }
+        .glow-effect:nth-child(7) {
+            width: 320px; height: 320px;
+            background: radial-gradient(circle, rgba(255, 100, 100, 0.4) 0%, transparent 70%);
+            animation: move-glow 14s infinite reverse;
+            left: 70%; top: 70%;
+        }
+
+        /* 2. 시한폭탄 이미지 컨테이너 */
+        .bomb-container {
+            position: relative;
+            /* ✨ 수정된 부분: 이미지 크기 확대 (612px -> 700px) */
+            width: 700px; 
+            height: 700px;
+            background-image: url('https://i.postimg.cc/BbGnrXRv/istockphoto-1577934549-612x612-removebg-preview.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: 10; 
+        }
+
+        /* 3. 노란색 글씨 (메시지) 위치 조정 - 사진 위로 올림 */
+        .message-box {
+            position: absolute;
+            top: 50px; 
+            width: 100%;
+            text-align: center;
+            color: #ffc107;
+            /* ✨ 수정된 부분: 노란색 텍스트 크기 확대 (1.2em -> 1.8em) */
+            font-size: 1.8em; 
+            font-weight: bold;
+            text-shadow: 0 0 10px #ffc107, 0 0 5px #ff0000;
+            z-index: 20; 
+        }
+        
+        /* 4. 디지털 타이머 (이미지 위에 오버레이) */
+        .digital-timer {
+            position: absolute;
+            /* ✨ 수정된 부분: 이미지 크기가 커졌으므로 타이머 위치 조정 */
+            top: 310px; 
+            left: 50%;
+            transform: translateX(-50%);
+            
+            background: #000;
+            border: 2px solid #555;
+            padding: 5px 10px;
+            border-radius: 3px;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+            
+            animation: gentle-pulse 1.5s infinite alternate;
+            z-index: 30; 
+        }
+
+        /* 5. 카운트다운 숫자 스타일 */
+        #countdown-display {
+            /* ✨ 수정된 부분: 카운트다운 숫자 크기 확대 (2.2em -> 3.5em) */
+            font-size: 3.5em; 
+            color: #ff0000; 
+            text-shadow: 0 0 10px #ff0000;
+            white-space: nowrap; 
+        }
+        
+        /* 6. 시간 단위 레이블 */
+        .label-container {
+            /* ✨ 수정된 부분: 레이블 크기 확대 (0.5em -> 0.7em) */
+            font-size: 0.7em; 
+            color: #888;
+            margin-top: 5px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        /* 7. 애니메이션 정의 */
+        
+        /* 타이머 본체 은은한 깜빡임 */
+        @keyframes gentle-pulse {
+            from { box-shadow: 0 0 15px rgba(255, 0, 0, 0.7); }
+            to { box-shadow: 0 0 25px rgba(255, 100, 100, 0.9); }
+        }
+
+        /* D-DAY 폭발 경고 스타일 */
+        .countdown-finished {
+            /* ✨ 수정된 부분: 폭발 경고 크기 확대 (2.5em -> 4em) */
+            font-size: 4em !important; 
+            color: #FF4500 !important;
+            animation: warning-flash 0.3s infinite alternate;
+            text-shadow: 0 0 30px #FF4500;
+        }
+        
+        /* D-DAY 폭발 경고 깜빡임 */
+        @keyframes warning-flash {
+            from { opacity: 1; }
+            to { opacity: 0.2; }
+        }
+        
+        /* 글로우 움직임 1 */
+        @keyframes move-glow {
+            0% { transform: translate(-100px, -100px); }
+            25% { transform: translate(100px, 150px); }
+            50% { transform: translate(-150px, 50px); }
+            75% { transform: translate(50px, -100px); }
+            100% { transform: translate(-100px, -100px); }
+        }
+        
+        /* 글로우 움직임 2 */
+        @keyframes move-glow-2 {
+            0% { transform: translate(200px, 0px) scale(1); }
+            50% { transform: translate(-200px, 300px) scale(1.1); }
+            100% { transform: translate(200px, 0px) scale(1); }
+        }
+        
+        /* 글로우 움직임 3 */
+        @keyframes move-glow-3 {
+            0% { transform: translate(-50px, 50px); }
+            100% { transform: translate(100px, -150px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glow-effect"></div>
+    <div class="glow-effect"></div>
+    <div class="glow-effect"></div>
+    <div class="glow-effect"></div>
+    <div class="glow-effect"></div>
+    <div class="glow-effect"></div>
+    <div class="glow-effect"></div>
+
+    <div class="bomb-container">
+        
+        <div class="message-box" id="message">
+            🚨 Final exam is coming 🚨
+        </div>
+        
+        <div class="digital-timer">
+            <div id="countdown-display">
+                </div>
+            <div class="label-container">
+                <span>D</span>
+                <span>H</span>
+                <span>M</span>
+                <span>S</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 목표 날짜 및 시간 설정 (2025년 12월 8일 09:00:00 KST)
+        const targetDate = new Date("December 8, 2025 09:00:00").getTime();
+
+        const displayElement = document.getElementById('countdown-display');
+        const messageElement = document.getElementById('message');
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            // 시간 계산
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // 두 자리수로 포맷팅
+            const formatTime = (time, pad = 2) => String(time).padStart(pad, '0');
+
+            // 카운트다운 표시
+            if (distance > 0) {
+                // 일, 시, 분, 초를 콜론으로 연결하여 표시
+                displayElement.innerHTML = `
+                    ${days}:${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}
+                `;
+            } else {
+                // 시험 시간이 되었거나 지났을 때
+                displayElement.innerHTML = '<span class="countdown-finished">T I M E &nbsp; U P!</span>';
+                messageElement.innerHTML = '🔥 EXAM HAS BEGUN! GOOD LUCK! 🔥';
+                clearInterval(interval); // 카운트다운 중지
+            }
+        }
+
+        // 1초마다 업데이트
+        const interval = setInterval(updateCountdown, 1000);
+
+        // 페이지 로드 시 즉시 실행
+        updateCountdown();
+    </script>
+</body>
+</html>
