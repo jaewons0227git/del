@@ -32,11 +32,12 @@
             overflow: hidden; 
         }
 
-        /* 3. 시한폭탄 이미지 컨테이너 (반응형 vmin 단위 적용) */
+        /* 3. 시한폭탄 이미지 컨테이너 (vmin 단위 적용 - 크기 축소) */
         .bomb-container {
             position: relative;
-            width: 70vmin; 
-            height: 70vmin;
+            /* ✨ 수정된 부분: 크기 70vmin -> 60vmin으로 축소 */
+            width: 60vmin; 
+            height: 60vmin;
             background-image: url('https://i.postimg.cc/BbGnrXRv/istockphoto-1577934549-612x612-removebg-preview.png');
             background-size: contain;
             background-repeat: no-repeat;
@@ -44,23 +45,24 @@
             z-index: 10; 
         }
 
-        /* 4. 노란색 글씨 (메시지) 위치 조정 및 크기 확대 */
+        /* 4. 노란색 글씨 (메시지) 위치 조정 및 크기 (vmin 기반) */
         .message-box {
             position: absolute;
             top: 7%; 
             width: 100%;
             text-align: center;
             color: #ffc107;
-            font-size: 1.8em; 
+            /* ✨ 수정: 텍스트 크기를 3vmin -> 2.5vmin으로 축소 (비율 유지) */
+            font-size: 2.5vmin; 
             font-weight: bold;
             text-shadow: 0 0 10px #ffc107, 0 0 5px #ff0000;
             z-index: 20; 
         }
-        
+
         /* 5. 디지털 타이머 (이미지 위에 오버레이) */
         .digital-timer {
             position: absolute;
-            top: 44%; 
+            top: 45%; 
             left: 50%;
             transform: translateX(-50%);
             
@@ -74,24 +76,26 @@
             z-index: 30; 
         }
 
-        /* 6. 카운트다운 숫자 스타일 */
+        /* 6. 카운트다운 숫자 스타일 (vmin 기반) */
         #countdown-display {
-            font-size: 3.5em; 
+            /* ✨ 수정: 텍스트 크기를 7vmin -> 6vmin으로 축소 (비율 유지) */
+            font-size: 4vmin; 
             color: #ff0000; 
             text-shadow: 0 0 10px #ff0000;
             white-space: nowrap; 
         }
         
-        /* 7. 시간 단위 레이블 */
+        /* 7. 시간 단위 레이블 (vmin 기반) */
         .label-container {
-            font-size: 0.7em; 
+            /* ✨ 수정: 텍스트 크기를 1.2vmin -> 1vmin으로 축소 (비율 유지) */
+            font-size: 1vmin; 
             color: #888;
             margin-top: 5px;
             display: flex;
             justify-content: space-around;
         }
 
-        /* 8. YouTube 영상 섹션 */
+        /* 8. YouTube 영상 섹션 (나머지 스타일은 동일) */
         .video-section {
             width: 90%;
             max-width: 800px;
@@ -108,7 +112,7 @@
         .video-container {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%; /* 16:9 비율 유지 */
+            padding-bottom: 56.25%; 
             height: 0;
             overflow: hidden;
         }
@@ -121,7 +125,7 @@
             height: 100%;
         }
 
-        /* 9. 애니메이션 (글로우 및 타이머) */
+        /* 9. 애니메이션 */
         
         /* 글로우 효과 스타일 (공통) */
         .glow-effect {
@@ -182,9 +186,10 @@
             to { box-shadow: 0 0 25px rgba(255, 100, 100, 0.9); }
         }
 
-        /* D-DAY 폭발 경고 스타일 */
+        /* D-DAY 폭발 경고 스타일 (vmin 기반) */
         .countdown-finished {
-            font-size: 4em !important; 
+            /* ✨ 수정: 텍스트 크기를 10vmin -> 8.5vmin으로 축소 (비율 유지) */
+            font-size: 4.5vmin !important; 
             color: #FF4500 !important;
             animation: warning-flash 0.3s infinite alternate;
             text-shadow: 0 0 30px #FF4500;
