@@ -8,8 +8,8 @@
         /* 1. 전체 배경 및 기본 설정 */
         body {
             display: flex;
-            flex-direction: column; /* 세로로 배치 */
-            justify-content: flex-start; /* 상단에서 시작 */
+            flex-direction: column; 
+            justify-content: flex-start; 
             align-items: center;
             height: auto;
             min-height: 100vh;
@@ -17,7 +17,7 @@
             background-color: #000; 
             font-family: 'Courier New', monospace;
             color: #fff;
-            overflow-x: hidden; /* 글로우로 인한 가로 스크롤 방지 */
+            overflow-x: hidden; 
             position: relative; 
         }
 
@@ -28,14 +28,13 @@
             align-items: center;
             position: relative;
             width: 100vw;
-            height: 100vh; /* 화면 높이 전체를 차지 */
-            overflow: hidden; /* 글로우가 화면 밖으로 나가도 스크롤 생기지 않도록 함 */
+            height: 100vh; 
+            overflow: hidden; 
         }
 
         /* 3. 시한폭탄 이미지 컨테이너 (반응형 vmin 단위 적용) */
         .bomb-container {
             position: relative;
-            /* ✨ 수정: vmin으로 변경하여 화면 크기에 맞게 조정 */
             width: 70vmin; 
             height: 70vmin;
             background-image: url('https://i.postimg.cc/BbGnrXRv/istockphoto-1577934549-612x612-removebg-preview.png');
@@ -48,12 +47,10 @@
         /* 4. 노란색 글씨 (메시지) 위치 조정 및 크기 확대 */
         .message-box {
             position: absolute;
-            /* ✨ 수정: %로 변경하여 폭탄 컨테이너에 맞춰 조정 */
             top: 7%; 
             width: 100%;
             text-align: center;
             color: #ffc107;
-            /* ✨ 수정: 텍스트 크기 확대 */
             font-size: 1.8em; 
             font-weight: bold;
             text-shadow: 0 0 10px #ffc107, 0 0 5px #ff0000;
@@ -63,7 +60,6 @@
         /* 5. 디지털 타이머 (이미지 위에 오버레이) */
         .digital-timer {
             position: absolute;
-            /* ✨ 수정: %로 변경하여 폭탄 컨테이너에 맞춰 조정 */
             top: 44%; 
             left: 50%;
             transform: translateX(-50%);
@@ -80,7 +76,6 @@
 
         /* 6. 카운트다운 숫자 스타일 */
         #countdown-display {
-            /* ✨ 수정: 숫자 크기 확대 */
             font-size: 3.5em; 
             color: #ff0000; 
             text-shadow: 0 0 10px #ff0000;
@@ -89,7 +84,6 @@
         
         /* 7. 시간 단위 레이블 */
         .label-container {
-            /* ✨ 수정: 레이블 크기 확대 */
             font-size: 0.7em; 
             color: #888;
             margin-top: 5px;
@@ -260,13 +254,13 @@
         <h2>🔥 집중력을 폭발시켜라 🔥</h2>
         <div class="video-container">
             <iframe 
-                src="https://www.youtube.com/embed/a_80o2lDYec?autoplay=1&mute=1&controls=0&loop=1&playlist=a_80o2lDYec" 
+                src="https://www.youtube.com/embed/a_80o2lDYec?autoplay=1&controls=1&loop=1&playlist=a_80o2lDYec" 
                 frameborder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                 allowfullscreen>
             </iframe>
         </div>
-        <p style="color: #666; font-size: 0.8em; margin-top: 15px;">(영상은 집중력 향상을 위해 음소거 및 자동 반복됩니다)</p>
+        <p style="color: #FF4500; font-size: 0.9em; margin-top: 15px; font-weight: bold;">🚨 영상이 소리와 함께 자동 재생됩니다. 🚨</p>
     </div>
 
     <script>
